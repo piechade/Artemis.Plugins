@@ -1,4 +1,5 @@
-﻿using RGB.NET.Core;
+﻿using Artemis.Plugins.Tasmota.Settings;
+using RGB.NET.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,49 +25,34 @@ namespace Artemis.Plugins.Tasmota.RGB.NET
 
         private static TasmotaRGBDeviceProvider _instance;
 
-        private List<String> stripsIpAddress;
+        public List<TasmotaDeviceDefinitions> DeviceDefinitions { get; } = new();
 
         public static TasmotaRGBDeviceProvider Instance => _instance ?? new TasmotaRGBDeviceProvider();
-
-        private TasmotaUpdateQueue? _tasmotaUpdateQueue;
 
 
         #endregion
 
         #region Methods
 
-        protected override void InitializeSDK()
-        {
-        }
+        public void AddDeviceDefinition(TasmotaDeviceDefinitions deviceDefinition) => DeviceDefinitions.Add(deviceDefinition);
+
+        protected override void InitializeSDK() { }
 
         public override void Dispose()
         {
             base.Dispose();
+
+            DeviceDefinitions.Clear();
         }
 
         protected override IEnumerable<IRGBDevice> LoadDevices()
         {
-            stripsIpAddress = new List<string>
+            int i = 0;
+            foreach (TasmotaDeviceDefinitions deviceDefinition in DeviceDefinitions)
             {
-                "192.168.178.31"
-            };
-            foreach (string ipAddress in stripsIpAddress)
-            {
-                TasmotaLight light = new();
-                bool add = true;
-                try
-                {
-                    light.ConnectAsync(IPAddress.Parse(ipAddress));
-                    light.TurnOnAsync();
-                    light.AutoRefreshEnabled = true;
-
-                }
-                catch
-                {
-                    add = false;
-                }
-                if (add)
-                    yield return new TasmotaDevice(new TasmotaDeviceInfo(RGBDeviceType.Unknown, "RGB Strip", "192.168.1.42"), new TasmotaUpdateQueue(GetUpdateTrigger(), light));
+                IDeviceUpdateTrigger updateTrigger = GetUpdateTrigger(i++);
+                foreach (IRGBDevice device in deviceDefinition.CreateDevices(updateTrigger))
+                    yield return device;
             }
         }
 

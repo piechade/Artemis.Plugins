@@ -10,7 +10,7 @@ namespace Artemis.Plugins.Tasmota.RGB.NET
 
         public string IpAddress { get; }
 
-        public string Manufacturer => "MagicHome";
+        public string Manufacturer => "Tasmota";
 
         public string Model { get; }
 
@@ -22,7 +22,7 @@ namespace Artemis.Plugins.Tasmota.RGB.NET
             this.Model = model;
             this.IpAddress = IpAddress;
 
-            DeviceName = "Magic Home Led Strip";
+            DeviceName = "Tasmota Led Strip";
         }
     }
 }

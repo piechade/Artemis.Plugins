@@ -46,10 +46,22 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="Layout\Led Strip.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Layout\Led Strip.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Layout\tasmota.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Layout\tasmota.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
     <None Update="plugin.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Resources\hue.svg">
+    <None Update="Resources\tasmota.svg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
 	<Content Include="Layouts\**">
@@ -61,11 +73,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="Resources\pushlink_bridge_v2.png" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Resource Include="Resources\pushlink_bridge_v2.png" />
+    <Page Update="Views\Dialogs\DeviceConfigurationDialogView.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+    </Page>
+    <Page Update="Views\TasmotaConfigurationView.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+    </Page>
   </ItemGroup>
 
   <!-- This may trigger another build (something related to the obj folder) so only run it if building inside VS -->
